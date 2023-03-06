@@ -7,12 +7,15 @@ import { supabase } from '../utils/supabase'
 import { Spinner } from './Spinner'
 import { UserProfile } from './UserProfile'
 import useStore from '@/store'
+import { Notification } from './Notification'
 
 export const DashBoard: FC = () => {
   const queryClient = useQueryClient()
   const resetProfile = useStore((state) => state.resetEditedProfile)
+  const resetNotice = useStore((state) => state.resetEditedNotice)
   const signOut = () => {
     resetProfile()
+    resetNotice()
     supabase.auth.signOut()
     queryClient.removeQueries(['profile'])
     // queryClient.removeQueries(['notices'])
@@ -50,7 +53,9 @@ export const DashBoard: FC = () => {
               <ExclamationCircleIcon className="my-5 h-10 w-10 text-pink-500" />
             }
           >
-            <Suspense fallback={<Spinner />}>{/* <Notification /> */}</Suspense>
+            <Suspense fallback={<Spinner />}>
+              <Notification />
+            </Suspense>
           </ErrorBoundary>
         </div>
       </div>
