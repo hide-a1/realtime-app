@@ -8,18 +8,21 @@ import { Spinner } from './Spinner'
 import { UserProfile } from './UserProfile'
 import useStore from '@/store'
 import { Notification } from './Notification'
+import { Feed } from './Feed'
 
 export const DashBoard: FC = () => {
   const queryClient = useQueryClient()
   const resetProfile = useStore((state) => state.resetEditedProfile)
   const resetNotice = useStore((state) => state.resetEditedNotice)
+  const resetPost = useStore((state) => state.resetEditedPost)
   const signOut = () => {
     resetProfile()
     resetNotice()
+    resetPost()
     supabase.auth.signOut()
     queryClient.removeQueries(['profile'])
-    // queryClient.removeQueries(['notices'])
-    // queryClient.removeQueries(['posts'])
+    queryClient.removeQueries(['notices'])
+    queryClient.removeQueries(['posts'])
   }
   return (
     <>
@@ -44,7 +47,9 @@ export const DashBoard: FC = () => {
               <ExclamationCircleIcon className="my-5 h-10 w-10 text-pink-500" />
             }
           >
-            <Suspense fallback={<Spinner />}>{/* <Feed /> */}</Suspense>
+            <Suspense fallback={<Spinner />}>
+              <Feed />
+            </Suspense>
           </ErrorBoundary>
         </div>
         <div className="flex flex-col items-center">
